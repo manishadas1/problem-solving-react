@@ -27,12 +27,18 @@ const QuotePage = () => {
       }
     };
 
-    fetchData();
+    const fetchReload = async () => {
+      await fetchData();
+
+      const intervalId = setInterval(() => {
+        window.location.reload();
+      }, 20000);
+    }; 
   }, [symbol]);
 
   return (
     <div>
-      <h2>Quote Page for {symbol}</h2>
+      <h3>Quote Page for {symbol}</h3>
       {load ? (
         <p>Loading...</p>
       ) : (
