@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Papa from 'papaparse';
 import Fuse from 'fuse.js';
@@ -10,6 +10,7 @@ const StocksPage = () => {
   const [stocks, setStocks] = useState([]);
   const [search, setSearch] = useState('');
   const [searchRes, setSearchRes] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -50,6 +51,10 @@ const StocksPage = () => {
     setSearchRes(results.map((result) => result.item));
   }, [search, stocks]);
 
+  const handleSymbolClick = (symbol) => {
+    navigate(`/quotes/${symbol}`);
+  };
+
   return (
     <div>
       <h1>Stocks Page</h1>
@@ -72,7 +77,12 @@ const StocksPage = () => {
           {searchRes.map((stock) => (
             <tr key={stock.Symbol}>
               <td>
-                <Link to={`/quotes/${stock.Symbol}`}>{stock.Symbol}</Link>
+                <span
+                  style={{ cursor: 'pointer', }}
+                  onClick={() => handleSymbolClick(stock.Symbol)}
+                >
+                  {stock.Symbol}
+                </span>
               </td>
               <td>{stock.Name}</td>
               <td>{stock.Sector}</td>
