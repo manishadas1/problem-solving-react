@@ -4,7 +4,7 @@ import axios from 'axios';
 
 const QuotesAPI = 'https://prototype.sbulltech.com/api/v2/quotes';
 
-const QuotePage = () => {
+const Quote = () => {
   const { symbol } = useParams();
   const [quotes, setQuotes] = useState([]);
   const [load, setLoad] = useState(true);
@@ -16,7 +16,8 @@ const QuotePage = () => {
         const { success, payload } = response.data;
 
         if (success) {
-          setQuotes(payload[symbol] || []);
+          const sortedQuotes = (payload[symbol] || []).sort((a, b) => new Date(a.time) - new Date(b.time));
+          setQuotes(sortedQuotes);
         } else {
           console.error('Error fetching quotes:', response.data);
         }
@@ -32,7 +33,7 @@ const QuotePage = () => {
 
       const intervalId = setInterval(() => {
         window.location.reload();
-      }, 20000);
+      }, 10000);
 
       return () => {
         clearInterval(intervalId);
@@ -44,7 +45,7 @@ const QuotePage = () => {
 
   return (
     <div>
-      <h3>Quote Page for {symbol}</h3>
+      <h2>Quote Page for {symbol}</h2>
       {load ? (
         <p>Loading...</p>
       ) : (
@@ -71,4 +72,4 @@ const QuotePage = () => {
   );
 };
 
-export default QuotePage;
+export default Quote;
