@@ -33,7 +33,13 @@ const QuotePage = () => {
       const intervalId = setInterval(() => {
         window.location.reload();
       }, 20000);
-    }; 
+
+      return () => {
+        clearInterval(intervalId);
+      };
+    };
+
+    fetchReload();
   }, [symbol]);
 
   return (

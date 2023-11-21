@@ -43,7 +43,7 @@ const StocksPage = () => {
     const choice = {
       keys: ['Symbol', 'Name', 'Sector', 'Validtill'],
       threshold: 0.5,
-      match: 'any',
+      match: 'all',
     };
 
     const fuse = new Fuse(stocks, choice);
