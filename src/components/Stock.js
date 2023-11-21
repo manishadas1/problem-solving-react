@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Papa from 'papaparse';
 import Fuse from 'fuse.js';
@@ -13,11 +14,9 @@ const StocksPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        
         const response = await axios.get(InstrumentsAPI);
         const csvData = response.data;
 
-        
         Papa.parse(csvData, {
           header: true,
           dynamicTyping: true,
@@ -32,22 +31,21 @@ const StocksPage = () => {
     };
 
     fetchData();
-  }, []); 
+  }, []);
 
   useEffect(() => {
-
     if (search.trim() === '') {
       setSearchRes(stocks);
       return;
     }
 
-    const options = {
-      keys: ['Symbol', 'Name' , 'Sector' , 'Validtill'],
-      threshold: 0.5, 
+    const choice = {
+      keys: ['Symbol', 'Name', 'Sector', 'Validtill'],
+      threshold: 0.5,
       match: 'any',
     };
 
-    const fuse = new Fuse(stocks, options);
+    const fuse = new Fuse(stocks, choice);
     const results = fuse.search(search);
     setSearchRes(results.map((result) => result.item));
   }, [search, stocks]);
@@ -73,7 +71,9 @@ const StocksPage = () => {
         <tbody>
           {searchRes.map((stock) => (
             <tr key={stock.Symbol}>
-              <td>{stock.Symbol}</td>
+              <td>
+                <Link to={`/quotes/${stock.Symbol}`}>{stock.Symbol}</Link>
+              </td>
               <td>{stock.Name}</td>
               <td>{stock.Sector}</td>
               <td>{stock.Validtill}</td>
@@ -86,13 +86,3 @@ const StocksPage = () => {
 };
 
 export default StocksPage;
-
-
-
-
-
-
-
-
-
-
